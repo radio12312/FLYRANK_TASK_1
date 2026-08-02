@@ -80,3 +80,36 @@ def delete_task(task_id: int):
             tasks.pop(i)
             return
     raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
+
+# Optional: Stats endpoint
+@app.get("/stats")
+def get_stats():
+    """Get statistics about tasks: total count, completed count, and open count."""
+    total = len(tasks)
+    done = sum(1 for t in tasks if t["done"])
+    open_count = total - done
+    return {
+        "total": total,
+        "done": done,
+        "open": open_count
+    }
+
+# Optional: Reset to initial state
+@app.post("/reset")
+def reset_tasks():
+    """Reset all tasks to the initial 3 example tasks. Useful for demos and testing."""
+    global tasks
+    tasks = [
+        {"id": 1, "title": "Buy milk", "done": False},
+        {"id": 2, "title": "Walk the dog", "done": True},
+        {"id": 3, "title": "Write report", "done": False},
+    ]
+    return {"status": "reset", "tasks": tasks}
+
+# Optional: Filter tasks by done status
+@app.get("/tasks/filter/by-status")
+def filter_by_status(done: Optional[bool] = None):
+    """Filter tasks by completion status. Use ?done=true or ?done=false."""
+    if done is None:
+        return tasks
+    return [t for t in tasks if t["done"] == done]
