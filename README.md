@@ -147,6 +147,8 @@ Open [http://localhost:8000/docs](http://localhost:8000/docs) in your browser to
 - Automatic validation of inputs
 - Full CRUD cycle in a visual interface
 
+![Swagger UI Screenshot](swagger-ui-screenshot.png)
+
 ---
 
 ## Input Validation
