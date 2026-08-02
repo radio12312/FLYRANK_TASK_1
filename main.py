@@ -19,7 +19,7 @@ tasks = [
 # Stage 0 & 1: Root and Health endpoints
 @app.get("/")
 def read_root():
-    """Root endpoint describing the API."""
+    """API information endpoint. Returns details about the Task API."""
     return {
         "name": "Task API",
         "version": "1.0",
@@ -28,18 +28,18 @@ def read_root():
 
 @app.get("/health")
 def health_check():
-    """Health check endpoint."""
+    """Health check endpoint. Verifies the server is running and healthy."""
     return {"status": "ok"}
 
 # Stage 2: Read endpoints
 @app.get("/tasks")
 def list_tasks():
-    """List all tasks."""
+    """Retrieve all tasks. Returns a list of all task objects with their current state."""
     return tasks
 
 @app.get("/tasks/{task_id}")
 def get_task(task_id: int):
-    """Get a single task by ID."""
+    """Retrieve a single task by ID. Returns the task object if found, or 404 if not."""
     for task in tasks:
         if task["id"] == task_id:
             return task
@@ -48,11 +48,10 @@ def get_task(task_id: int):
 # Stage 3: Create endpoint
 @app.post("/tasks", status_code=201)
 def create_task(task: Task):
-    """Create a new task."""
+    """Create a new task. Accepts a task object with a title, assigns a new ID, and returns the created task."""
     if not task.title or task.title.strip() == "":
         raise HTTPException(status_code=400, detail="title is required and cannot be empty")
 
-    # Find next free ID
     new_id = max([t["id"] for t in tasks]) + 1 if tasks else 1
     new_task = {"id": new_id, "title": task.title, "done": False}
     tasks.append(new_task)
@@ -61,7 +60,7 @@ def create_task(task: Task):
 # Stage 4: Update endpoint
 @app.put("/tasks/{task_id}")
 def update_task(task_id: int, task: Task):
-    """Update a task's title and/or done status."""
+    """Update an existing task. Replace the task's title and/or done status with the provided values."""
     if not task.title or task.title.strip() == "":
         raise HTTPException(status_code=400, detail="title is required and cannot be empty")
 
@@ -75,7 +74,7 @@ def update_task(task_id: int, task: Task):
 # Stage 4: Delete endpoint
 @app.delete("/tasks/{task_id}", status_code=204)
 def delete_task(task_id: int):
-    """Delete a task."""
+    """Delete a task by ID. Returns 204 No Content on success, or 404 if task not found."""
     for i, t in enumerate(tasks):
         if t["id"] == task_id:
             tasks.pop(i)
