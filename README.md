@@ -71,10 +71,6 @@ curl http://localhost:8000/health
 | POST | `/tasks` | 201/400 | Create a new task; 400 if title is empty |
 | PUT | `/tasks/{id}` | 200/400/404 | Update a task; 400 if title invalid, 404 if not found |
 | DELETE | `/tasks/{id}` | 204/404 | Delete a task; 204 no content, 404 if not found |
-| GET | `/stats` | 200 | Get task statistics (total, done, open) |
-| POST | `/reset` | 200 | Reset all tasks to initial 3 example tasks |
-| GET | `/tasks/filter/by-status?done=true` | 200 | Filter tasks by completion status |
-| GET | `/tasks/search?q=milk` | 200 | Search tasks by title (case-insensitive) |
 
 ### Task Object
 
@@ -267,44 +263,6 @@ pip install -r requirements.txt
 3. **Request Validation** — The server never trusts the client; always validate input
 4. **In-Memory vs. Persistent** — Data in RAM vanishes on restart; that's why databases exist
 5. **API Documentation** — Swagger UI auto-generated from code makes APIs discoverable
-
----
-
-## Optional Features Implemented
-
-Beyond the core CRUD requirement, this API includes:
-
-### Stats Endpoint
-```bash
-$ curl http://localhost:8000/stats
-
-{"total":3,"done":1,"open":2}
-```
-Useful for dashboards and progress tracking.
-
-### Reset Endpoint
-```bash
-$ curl -X POST http://localhost:8000/reset
-
-{"status":"reset","tasks":[...]}
-```
-Handy for demos and testing — resets to 3 initial tasks.
-
-### Filter by Status
-```bash
-$ curl "http://localhost:8000/tasks/filter/by-status?done=true"
-
-[{"id":2,"title":"Walk the dog","done":true}]
-```
-Query parameter `?done=true` or `?done=false` to filter tasks.
-
-### Search by Title
-```bash
-$ curl "http://localhost:8000/tasks/search?q=dog"
-
-[{"id":2,"title":"Walk the dog","done":true}]
-```
-Case-insensitive search across task titles.
 
 ---
 
