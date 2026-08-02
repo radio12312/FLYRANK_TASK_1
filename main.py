@@ -106,10 +106,18 @@ def reset_tasks():
     ]
     return {"status": "reset", "tasks": tasks}
 
-# Optional: Filter tasks by done status
+# Optional: Filter tasks by done status or search by title
 @app.get("/tasks/filter/by-status")
 def filter_by_status(done: Optional[bool] = None):
     """Filter tasks by completion status. Use ?done=true or ?done=false."""
     if done is None:
         return tasks
     return [t for t in tasks if t["done"] == done]
+
+@app.get("/tasks/search")
+def search_tasks(q: str = ""):
+    """Search tasks by title. Returns tasks whose title contains the search query (case-insensitive)."""
+    if not q:
+        return tasks
+    search_lower = q.lower()
+    return [t for t in tasks if search_lower in t["title"].lower()]
