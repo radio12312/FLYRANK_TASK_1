@@ -187,17 +187,52 @@ The API uses standard HTTP status codes:
 
 ---
 
-## Data Storage
+## Database Storage
 
-**⚠️ Important:** This API stores data in **memory only**. All tasks are lost when the server restarts. This is intentional for learning purposes.
+**SQLite Database:** This API now uses SQLite for persistent storage. Data survives server restarts.
 
-To restart with fresh data:
-```bash
-# Simply restart the server
-# Ctrl+C, then run: uvicorn main:app --reload
+### Why SQLite?
+- **Single file:** No server to manage — just `tasks.db`
+- **Zero setup:** Creates automatically on first run
+- **Persistent:** Data survives restarts
+- **Real SQL:** Learn actual query syntax
+
+### Database File
+- **Location:** `tasks.db` (auto-created on startup)
+- **Schema:**
+  ```sql
+  CREATE TABLE tasks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      done BOOLEAN DEFAULT 0
+  )
+  ```
+- **Git ignored:** Each clone starts fresh (see `.gitignore`)
+
+---
+
+## Exploring SQL Directly
+
+Open `tasks.db` in [DB Browser for SQLite](https://sqlitebrowser.org/) (free) to run queries yourself:
+
+```sql
+-- List all tasks
+SELECT * FROM tasks;
+
+-- Only completed tasks
+SELECT * FROM tasks WHERE done = 1;
+
+-- Count total tasks
+SELECT COUNT(*) FROM tasks;
+
+-- Mark all tasks done
+UPDATE tasks SET done = 1;
+
+-- Delete all completed tasks
+DELETE FROM tasks WHERE done = 1;
 ```
 
-This in-memory design teaches why databases exist—*persistent storage* is next week's topic.
+**Key insight:** Changes made in DB Browser appear instantly through the API (same database file = one source of truth).
 
 ---
 
