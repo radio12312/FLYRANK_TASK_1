@@ -219,6 +219,12 @@ The API uses standard HTTP status codes:
 
 ---
 
+## Database Visualization
+
+![Database Screenshot](database-screenshot.png)
+
+*The tasks table stores id, title, and done status. Three example tasks are pre-loaded on first run.*
+
 ## Exploring SQL Directly
 
 Open `tasks.db` in [DB Browser for SQLite](https://sqlitebrowser.org/) (free) to run queries yourself:
