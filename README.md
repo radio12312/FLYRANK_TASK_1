@@ -1,17 +1,23 @@
-# Task API — A CRUD Backend for To-Do Lists
+# Task API — A Database-Backed CRUD API
 
-A simple, in-memory RESTful API for managing tasks. Built with FastAPI to demonstrate CRUD operations, HTTP status codes, request validation, and Swagger UI documentation.
+A RESTful API for managing tasks with persistent SQLite storage. Built with FastAPI to demonstrate CRUD operations, HTTP status codes, request validation, Swagger UI documentation, and SQL integration.
+
+**Week 3 Update:** Now database-backed with SQLite — data persists across server restarts. Database auto-initializes with seed data on first run.
 
 ## Quick Start
 
-### 1. Install & Run (one command)
+### One Command to Run
 
 ```bash
-# Clone the repo (if not already done)
+# Clone repo → activate venv → install → run
+git clone https://github.com/radio12312/FLYRANK_TASK_1.git && cd FLYRANK_TASK_1 && python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && uvicorn main:app --reload
+```
+
+Or step by step:
+
+```bash
 git clone https://github.com/radio12312/FLYRANK_TASK_1.git
 cd FLYRANK_TASK_1
-
-# Create and activate virtual environment
 python -m venv venv
 
 # Windows:
@@ -19,14 +25,16 @@ venv\Scripts\activate
 # Mac/Linux:
 source venv/bin/activate
 
-# Install dependencies
 pip install -r requirements.txt
-
-# Run the server
 uvicorn main:app --reload
 ```
 
-Server runs at `http://localhost:8000`
+**What happens:**
+1. Server starts at `http://localhost:8000`
+2. `tasks.db` creates automatically with 3 seeded tasks
+3. API ready to use instantly
+
+**Note:** Database file `tasks.db` is git-ignored, so each clone starts fresh.
 
 ### 2. Explore the API
 
