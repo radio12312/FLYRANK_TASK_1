@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: task-api-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-taskapi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-taskapi}
+      POSTGRES_DB: ${POSTGRES_DB:-tasks}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-taskapi} -d ${POSTGRES_DB:-tasks}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+    # Named volume: Postgres data lives here, outside the container's
+    # writable layer, so `docker compose down` (without -v) keeps it.
