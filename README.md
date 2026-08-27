@@ -297,9 +297,17 @@ This proves persistence lives in the Docker **volume**, not in the containers �
 
 ## Database Visualization
 
-![Database Screenshot](database-screenshot.png)
+### Postgres (current — Week 4)
 
-*The tasks table stores id, title, and done status. Three example tasks are pre-loaded on first run.*
+![Postgres data screenshot](postgres-data-screenshot.png)
+
+*Real output of `docker exec -it task-api-db psql -U taskapi -d tasks -c "SELECT * FROM tasks;"` against the running container — the 3 seeded tasks, queried directly from Postgres.*
+
+### SQLite (Week 3 fallback path)
+
+![SQLite Database Screenshot](database-screenshot.png)
+
+*The same table shape (id, title, done) as seen through DB Browser for SQLite when running the no-Docker fallback (`DB_BACKEND=sqlite`).*
 
 ## Exploring SQL Directly
 
