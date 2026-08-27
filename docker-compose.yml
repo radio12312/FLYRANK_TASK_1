@@ -20,6 +20,22 @@ services:
       timeout: 5s
       retries: 5
 
+  app:
+    build: .
+    container_name: task-api-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_BACKEND: postgres
+      # Inside the Docker network, Postgres is reachable at hostname "db"
+      # (the service name above) — never localhost, which would mean
+      # "this app container itself" from in here.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-taskapi}:${POSTGRES_PASSWORD:-taskapi}@db:5432/${POSTGRES_DB:-tasks}
+    ports:
+      - "${APP_PORT:-8020}:8000"
+
 volumes:
   pgdata:
     # Named volume: Postgres data lives here, outside the container's
