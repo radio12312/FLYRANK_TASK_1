@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+import config
 from sqlite_repository import SQLiteTaskRepository
 from service import TaskService, InvalidTaskError, TaskNotFoundError
 
@@ -12,9 +13,14 @@ class TaskIn(BaseModel):
     done: bool
 
 # Repository + service wiring.
-# Swapping storage backends (e.g. to Postgres) only ever touches this
-# block — routes below never change.
-repository = SQLiteTaskRepository()
+# This is the ONLY block that changes when swapping storage backends —
+# the service above and every route below are identical either way.
+if config.DB_BACKEND == "postgres":
+    from postgres_repository import PostgresTaskRepository
+    repository = PostgresTaskRepository(config.DATABASE_URL)
+else:
+    repository = SQLiteTaskRepository(config.SQLITE_PATH)
+
 repository.init()
 service = TaskService(repository)
 
